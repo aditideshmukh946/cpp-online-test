@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>C++ Online Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #eaf0ff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 450px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #4338ca;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #4338ca;
+            background: #eef2ff;
+            font-size: 16px;
+        }
+
+        #next {
+            background: #4338ca;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>💻 C++ Online Test</h1>
+    <p id="progress"></p>
+    <h3 id="question"></h3>
+    <div id="options"></div>
+    <p id="result"></p>
+    <button id="next" onclick="nextQuestion()" hidden>
+        Next Question
+    </button>
+    <h2 id="score"></h2>
+</div>
+
+<script>
+const questions = [
+    {
+        q: "1. What is C++?",
+        options: ["Browser", "Programming Language", "Database", "Operating System"],
+        answer: 1
+    },
+    {
+        q: "2. Who developed C++?",
+        options: ["Bjarne Stroustrup", "Bill Gates", "Dennis Ritchie", "James Gosling"],
+        answer: 0
+    },
+    {
+        q: "3. Which symbol ends a C++ statement?",
+        options: [".", ":", ";", ","],
+        answer: 2
+    },
+    {
+        q: "4. Which keyword declares an integer?",
+        options: ["float", "char", "string", "int"],
+        answer: 3
+    },
+    {
+        q: "5. Which object displays output in C++?",
+        options: ["cin", "cout", "input", "print"],
+        answer: 1
+    }
+];
+
+let current = 0;
+let marks = 0;
+let answered = false;
+
+function showQuestion() {
+    answered = false;
+
+    document.getElementById("progress").textContent =
+        "Question " + (current + 1) + " of " + questions.length;
+
+    document.getElementById("question").textContent =
+        questions[current].q;
+
+    document.getElementById("result").textContent = "";
+    document.getElementById("next").hidden = true;
+
+    const area = document.getElementById("options");
+    area.innerHTML = "";
+
+    questions[current].options.forEach(function(option, index) {
+        const button = document.createElement("button");
+        button.textContent = option;
+
+        button.onclick = function() {
+            if (answered) return;
+            answered = true;
+
+            if (index === questions[current].answer) {
+                marks++;
+                document.getElementById("result").textContent =
+                    "Correct Answer!";
+            } else {
+                document.getElementById("result").textContent =
+                    "Wrong Answer!";
+            }
+
+            document.querySelectorAll("#options button").forEach(
+                b => b.disabled = true
+            );
+
+            document.getElementById("next").hidden = false;
+        };
+
+        area.appendChild(button);
+    });
+}
+
+function nextQuestion() {
+    current++;
+
+    if (current < questions.length) {
+        showQuestion();
+    } else {
+        document.getElementById("progress").textContent = "Test Completed!";
+        document.getElementById("question").textContent = "Your Result";
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("result").textContent = "Well done!";
+        document.getElementById("next").hidden = true;
+        document.getElementById("score").textContent =
+            "Your Score: " + marks + " / " + questions.length;
+    }
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
